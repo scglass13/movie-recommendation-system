@@ -1,25 +1,33 @@
-import MovieList from "@/components/MovieList";
+"use client";
 
-const sampleMovies = [
-  { id: 1, title: "Inception", poster: "https://via.placeholder.com/200x300" },
-  {
-    id: 2,
-    title: "Interstellar",
-    poster: "https://via.placeholder.com/200x300",
-  },
-  {
-    id: 3,
-    title: "The Dark Knight",
-    poster: "https://via.placeholder.com/200x300",
-  },
-];
+import { useEffect, useState } from "react";
+import MovieList from "../components/MovieList";
 
-export default function Home() {
+export default function HomePage() {
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      const res = await fetch(
+        `https://api.themoviedb.org/3/movie/popular?api_key=5314ec5f13d5b6fc429984a0c9893aef`
+      );
+      const data = await res.json();
+      const formattedMovies = data.results.map((movie) => ({
+        id: movie.id,
+        title: movie.title,
+        poster: `https://image.tmdb.org/t/p/w200${movie.poster_path}`,
+      }));
+      setMovies(formattedMovies);
+    };
+
+    fetchMovies();
+  }, []);
+
   return (
     <div>
       <h2>Welcome to the Movie Recommendation System</h2>
       <p>Discover movies tailored to your tastes!</p>
-      <MovieList movies={sampleMovies} />
+      <MovieList movies={movies} />
     </div>
   );
 }

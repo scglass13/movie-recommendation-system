@@ -1,4 +1,4 @@
-export default function MovieList({ movies }) {
+export default function MovieList({ movies, onSelectMovie }) {
   return (
     <div
       style={{
@@ -10,11 +10,13 @@ export default function MovieList({ movies }) {
       {movies.map((movie) => (
         <div
           key={movie.id}
+          onClick={() => onSelectMovie(movie)}
           style={{
             border: "1px solid #ccc",
             borderRadius: "8px",
             padding: "10px",
             textAlign: "center",
+            cursor: "pointer",
           }}
         >
           <img

@@ -65,12 +65,44 @@ export default function HomePage() {
       const res = await fetch(
         `/api/recommend?title=${encodeURIComponent(movieTitle)}`
       );
-      if (!res.ok) throw new Error("No recommendations found");
+
+      if (!res.ok) {
+        console.warn(`No recommendations found for ${movieTitle}.`);
+        setRecommendedMovies([]); // set recommendations to empty list
+        setSelectedMovie(movieTitle);
+        return;
+      }
+
       const data = await res.json();
-      setRecommendedMovies(data.recommendations);
+
+      // Fetch movie details including posters for each recommended movie
+      const detailedRecommendations = await Promise.all(
+        data.recommendations.map(async (title, index) => {
+          const searchRes = await fetch(
+            `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
+              title
+            )}&api_key=${apiKey}`
+          );
+          const searchData = await searchRes.json();
+          const movie = searchData.results[0]; // Take the first search result
+
+          return movie
+            ? {
+                id: movie.id || index,
+                title: movie.title,
+                poster: movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
+                  : "https://via.placeholder.com/200", // Default placeholder if no poster is available
+              }
+            : null;
+        })
+      );
+
+      setRecommendedMovies(detailedRecommendations.filter(Boolean)); // remove null values
     } catch (error) {
       console.error("Failed to fetch recommendations: ", error);
       setRecommendedMovies([]); // clear recommendations on error
+      setSelectedMovie(movieTitle);
     }
   };
 
@@ -78,36 +110,26 @@ export default function HomePage() {
     <div>
       <h2>Welcome to the Movie Recommendation System</h2>
       <p>Discover movies tailored to your tastes!</p>
-      <MovieList
-        movies={movies}
-        onSelectMovie={(movie) => {
-          setSelectedMovie(movie);
-          fetchRecommendations(movie.title);
-        }}
-      />
 
-      {/* Display popular movies */}
-      <MovieList
-        movies={movies}
-        onSelectMovie={(movie) => {
-          setSelectedMovie(movie);
-          fetchRecommendations(movie.title);
-        }}
-      />
-
-      {/* Display recommended movies */}
-      {selectedMovie && (
+      {/* If no movie is selected, show all movies */}
+      {!selectedMovie ? (
+        <MovieList
+          movies={movies}
+          onSelectMovie={(movie) => {
+            setSelectedMovie(movie);
+            fetchRecommendations(movie.title);
+          }}
+        />
+      ) : (
         <div>
-          <h3>Recommended Movies for {selectedMovie.title}:</h3>
-          <ul>
-            {recommendedMovies.length > 0 ? (
-              recommendedMovies.map((movie, index) => (
-                <li key={index}>{movie}</li>
-              ))
-            ) : (
-              <p>No recommendations found.</p>
-            )}
-          </ul>
+          <button
+            onClick={() => setSelectedMovie(null)}
+            style={{ marginBottom: "20px" }}
+          >
+            🔙 Back to Movies
+          </button>
+          <h3>Recommended Movies for {selectedMovie?.title}:</h3>
+          <MovieList movies={recommendedMovies} />
         </div>
       )}
     </div>

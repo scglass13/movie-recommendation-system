@@ -1,37 +1,45 @@
-export default function MovieList({ movies, onSelectMovie }) {
+import React from "react";
+
+const MovieList = ({ movies, onSelectMovie }) => {
+  console.log("MovieList received movies:", movies); // Debugging
+
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+        display: "flex",
+        flexWrap: "wrap",
         gap: "20px",
+        justifyContent: "center",
       }}
     >
-      {movies.map((movie) => (
-        <div
-          key={movie.id}
-          onClick={() => onSelectMovie(movie)}
-          style={{
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            padding: "10px",
-            textAlign: "center",
-            cursor: "pointer",
-          }}
-        >
-          <img
-            src={movie.poster}
-            alt={movie.title}
+      {movies && movies.length > 0 ? (
+        movies.map((movie) => (
+          <div
+            key={movie.id}
             style={{
-              width: "100%",
-              height: "300px",
-              objectFit: "cover",
-              borderRadius: "8px",
+              cursor: "pointer",
+              textAlign: "center",
+              maxWidth: "150px",
             }}
-          />
-          <h3>{movie.title}</h3>
-        </div>
-      ))}
+            onClick={() => onSelectMovie?.(movie)}
+          >
+            {movie.poster ? (
+              <img
+                src={movie.poster}
+                alt={movie.title}
+                style={{ width: "100%" }}
+              />
+            ) : (
+              <p>No Poster Available</p>
+            )}
+            <p>{movie.title}</p>
+          </div>
+        ))
+      ) : (
+        <p>No movies available</p>
+      )}
     </div>
   );
-}
+};
+
+export default MovieList;

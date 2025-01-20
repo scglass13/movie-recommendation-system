@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+🎬 Movie Recommendation System
+📌 Overview
 
-## Getting Started
+The Movie Recommendation System is a web application that helps users discover movies tailored to their tastes. It fetches popular movies from the TMDb API and provides AI-powered recommendations when a user selects a movie.
+🚀 Features
 
-First, run the development server:
+    📌 Fetches Popular Movies – Retrieves a list of trending movies using the TMDb API.
+    🎭 Movie Metadata – Displays movie posters, titles, genres, directors, and actors.
+    🧠 AI-Powered Recommendations – Suggests similar movies based on selected movie attributes.
+    🔄 Dynamic UI – Clicking a movie updates the page to show recommended movies.
+    🎨 Responsive Design – Optimized for both desktop and mobile users.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+🛠️ Technologies Used
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    Frontend: React.js (Next.js)
+    Backend API: Node.js (Express)
+    Database: TMDb API (for movie data)
+    AI Model: Python (Scikit-Learn for recommendations)
+    Styling: CSS, Bootstrap
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+🎥 Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+    View popular movies displayed on the homepage.
+    Click on a movie to get AI-powered recommendations.
+    Browse recommended movies, displayed dynamically with posters.
+    Go back to the homepage using the Back to Movies button.
 
-## Learn More
+🧠 How the AI Model Works
 
-To learn more about Next.js, take a look at the following resources:
+    Step 1: The model is trained using train_model.py, which processes movie metadata (genres, keywords, actors).
+    Step 2: When a user selects a movie, the system searches for similar movies using cosine similarity.
+    Step 3: The recommendations are dynamically retrieved and displayed on the frontend.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+🎯 Future Improvements
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    🔍 Advanced AI Recommendations – Improve accuracy with deep learning models.
+    💾 User Authentication – Allow users to save favorite movies and preferences.
+    🌎 Multi-language Support – Make the app available in multiple languages.
+    📊 Movie Ratings & Reviews – Allow users to rate and review movies.
 
-## Deploy on Vercel
+📜 License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License.
